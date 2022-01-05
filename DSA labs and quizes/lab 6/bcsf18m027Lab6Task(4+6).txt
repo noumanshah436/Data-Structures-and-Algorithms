@@ -1,0 +1,83 @@
+
+Task 4 :
+
+1- As the most recently added worker in the company laid off first i.e Last in First out .
+   this process will achieved by stack.
+
+2- As this is like first in first out or first come firt served procedure.
+  this is achieved by Queue.
+
+3- For backtracking we use recent make choice to move back.
+Hence we use stack to achieve the most recent option i.e in Last in First out procedure. 
+
+4- As this is like First come first serve procedure we use Queue.
+
+5- As there procedure is not as First come first out (stack) or first come firts serve (queue)
+ and we ignore that who first come and who comes last, we cannot use either stack or queue.
+
+6- we use stack to check spelling from dictionary of words. 
+
+7- As this is like first come first serve procedure we use queue to achieve this process.
+
+8. We cannot achieved the random picking procedure either by queue or stack.
+
+
+
+
+
+
+
+Task 6
+
+
+1-  in constructor i initialize both front and back with -1 and make array of size n
+
+3-isEmpty () 
+   deque is empty if both  front and back are -1.
+
+4-isFull () 
+  i use circular deque so it is full if 
+  a)  front=0 and  back=capacity-1  or
+  b)  front=back+1   (in case of circular iteration)
+
+5-display ()
+    display deque from front till it not equal to back and at last display the one remaining 
+     element  at index whose value is in back.
+
+6-makeEmpty ()  
+    To make deque empty i just set back and front to -1. Now my other functions treat it as an empty deque.
+
+7-insertAtFront (int val) 
+  a)first I check is Deque full or not. if it is full return false.
+  b) if Deque is empty, set front and back to 0, and store value at index front=0 and return true.
+  c) in case if front=0 and we want to store at front , I circulate the deque i.e (front = capacity - 1 ) and store val at that index.
+  d) otherwise  subtract 1 from front and store val at that index.
+
+
+8-insertAtBack (int val)
+   a)first I check is Deque full or not. if it is full return false.
+    b) if Deque is empty, set front and back to 0, and store value at index back=0 and return true.
+    c)in case if (back=capacity-1)  in case of circular iteration, i set back=0 and store it here.
+    d) otherwise simply add 1 in back and store it in that index.
+
+9-removeFromFront (int& val)
+  a)  first of all  if deque is empty then return false.
+  b) in case of many circulation it is alse the case when there is only one element in deque, so first take that element 
+       and make the deque empty by set value of front and back to -1.
+  c)  in case of circular deque if front is at Capacity-1, first store val in vaiable to return, and change front to 0.
+   
+  d) otherwise simply take the val at index front and add 1 to front.
+
+
+10-removeFromBack (int& val)
+    a)  first of all  if deque is empty then return false.
+     b) in case of many circulation it is alse the case when there is only one element in deque, so first take that element 
+          and make the deque empty by set value of front and back to -1.
+     c) in case back=0 then first take value from that index and set back to capacity - 1. becaues in case of taking from front we add 1 in front , while in taking from back we subtrat 1 from back.
+     d) otherwise simply take value in variable and subtract -1 from back and return true.
+
+
+
+
+ 
+

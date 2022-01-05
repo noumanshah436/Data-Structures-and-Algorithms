@@ -1,0 +1,168 @@
+#include<iostream>
+using namespace std;
+
+class CDLinkedList;
+class DNode
+{
+	friend class CDLinkedList;
+private:
+	int data;
+	DNode* next;
+	DNode* prev;
+};
+class CDLinkedList
+{
+private:
+	DNode head; // Dummy header node
+public:
+	CDLinkedList() // Default constructor
+	{
+		head.next = &head;
+		head.prev = &head;
+		
+	}
+	~CDLinkedList() // Destructor
+	{
+		if (&head == head.prev)
+		{
+			return;
+		}
+		
+		DNode* x = head.next;
+		do
+		{
+			DNode* p = x;
+			x = x->next;
+			delete p;
+		} while (x != &head);
+
+		head.next = &head;
+		head.prev = &head;
+	}
+	bool insert(int val) // Inserts val at the start of linked list - Time complexity: O(1)
+	{
+		
+
+		DNode* x = new DNode;
+		x->data = val;
+		x->next = head.next;
+		x->prev = &head;
+
+		if (head.prev == &head)   // means list is empty
+		{
+			head.prev = x;
+		}
+		else
+		{
+			head.next->prev = x;
+		}
+		head.next = x;
+		
+		return true;
+
+	}
+
+	//  task3 function
+
+	
+	void combine(CDLinkedList& list1, CDLinkedList& list2)
+	{
+
+		if (&list1.head == list1.head.next && &list2.head == list2.head.next)
+		{
+			return;
+		}
+
+		if (&list1.head == list1.head.next)    //  if List1 is empty only store List2 in calling object and return
+		{
+			list2.head.next->prev = &head;
+			list2.head.prev->next = &head;
+			head.next = list2.head.next;
+			head.prev = list2.head.prev;
+
+			list2.head.next = &list2.head;   //  make list2  empty
+			list2.head.prev= &list2.head;
+
+
+			return;
+		}
+		                                          // otherwise store list1 first in calling object
+		list1.head.next->prev = &head;
+		list1.head.prev->next = &head;
+		head.next = list1.head.next;
+		head.prev = list1.head.prev;
+		list1.head.next = &list1.head;     //  madee list1  empty
+		list1.head.prev = &list1.head;
+		
+		if (&list2.head != list2.head.next)  // Now if list2 is not empty, then combine list2 also in calling object,    otherwise do nothing
+		{
+			head.prev->next = list2.head.next;
+			list2.head.next->prev = head.prev;
+			head.prev = list2.head.prev;
+			head.prev->next = &head;
+
+			list2.head.next = &list2.head;     //  make list2  empty
+			list2.head.prev = &list2.head;
+
+		}
+	}
+
+	void display() // Display the contents of linked list on screen
+	{
+		if (head.next == &head)
+		{
+			return;
+		}
+
+		DNode* p = head.next;
+		do
+		{
+			cout << p->data<< " ";
+			p = p->next;
+		} while (p != &head);
+
+		cout << "\n";
+		p = head.prev;
+		do
+		{
+			cout << p->data<< " ";
+			p = p->prev;
+		} while (p != &head);
+
+	}
+	
+};
+
+
+// driver for combine
+
+
+int main()
+{
+	CDLinkedList a;
+	a.insert(4);
+	a.insert(3);
+	a.insert(2);
+	a.insert(1);
+
+	cout << "\n\nList a\n";
+	a.display();
+
+
+	CDLinkedList b;
+	b.insert(8);
+	b.insert(7);
+	b.insert(6);
+	b.insert(5);
+	cout << "\n\nList b\n";
+	b.display();
+
+	CDLinkedList c;
+	c.combine(a, b);
+	cout << "\n\nList c\n";
+	c.display();
+
+	cout << "\nhello\n";
+	return 0;
+}
+

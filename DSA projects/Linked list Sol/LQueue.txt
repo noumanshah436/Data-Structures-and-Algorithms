@@ -1,0 +1,93 @@
+#ifndef L_QUEUE_H
+#define L_QUEUE_H
+template <typename T>
+struct Node
+{
+	T info;
+	Node <T>* next;
+public:
+	Node()
+	{
+		next = nullptr;
+	}
+	Node(T val)
+	{
+		info = val;
+		next = nullptr;
+	}
+};
+template <typename T>
+class LQueue
+{
+	int numberOfElements;
+	Node <T>* head;
+	Node <T>* tail;
+	void insertAtTail(T val)
+	{
+		if (head == nullptr)
+		{
+			head = new Node<T>(val);
+			tail = head;
+			return;
+		}
+		else
+		{
+			tail->next = new Node<T>(val);
+			tail = tail->next;
+		}
+	}
+	void removeAtHead()
+	{
+		if (head)
+		{
+			head = head->next;
+			if (!head)
+				tail = nullptr;
+		}
+	}
+public:
+	LQueue():numberOfElements(0)
+	{
+		head = nullptr;
+		tail = nullptr;
+	}
+	bool isEmpty()
+	{
+		return (numberOfElements == 0);
+	}
+	void enQueue(T val)
+	{
+		insertAtTail(val);
+		numberOfElements++;
+	}
+	T deQueue()
+	{
+		T val;
+		if (!isEmpty())
+			val = head->info;
+		else
+			throw exception();
+		removeAtHead();
+		numberOfElements--;
+		return val;
+	}
+	int getElementAtFront()
+	{
+		if (isEmpty())
+			throw exception;
+		return head->info;
+	}
+	int getNumberOfElements()
+	{
+		return numberOfElements;
+	}
+	~LQueue()
+	{
+		while (!isEmpty())
+		{
+			removeAtHead();
+			numberOfElements--;
+		}
+	}
+};
+#endif // !L_QUEUE_H

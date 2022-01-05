@@ -1,0 +1,15 @@
+
+
+*task 1
+ Designed an inventory class and a class stack which store Inventory objects. When user want to
+add in inventory  push it in stack, and if want to take part from inventory then pop it from stack.
+
+
+*task2
+take a number and divide it by base, take remainder and multiply it with a variable whose values change as 1,10,100,..
+in each division and add ans with remainder.
+
+
+* task3
+sore string in two stacks. In first stack store in straight ordre and in second stackt store in reverse order
+Now check if each same index value is same in each stack , it is palindrome otherwise not.

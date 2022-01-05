@@ -1,0 +1,210 @@
+#ifndef LDLL_H
+#define LDLL_H
+template <typename T>
+struct DNode
+{
+	T info;
+	DNode <T>* next;
+	DNode <T>* prev;
+public:
+	DNode()
+	{
+		prev = nullptr;
+		next = nullptr;
+	}
+	DNode(T val):info(val)
+	{
+		prev = nullptr;
+		next = nullptr;
+	}
+};
+template <typename T>
+class LDLL
+{
+	DNode <T>* head;
+public:
+	LDLL()
+	{
+		head = nullptr;
+	}
+	void insertAtHead(T val)
+	{
+		if (head == nullptr)
+		{
+			head = new DNode<T>(val);
+			return;
+		}
+		DNode <T>* x = new DNode<T>(val);
+		x->next = head;
+		head->prev = x;
+		head = x;
+	}
+	void insertAtTail(T val)
+	{
+		if (head == nullptr)
+		{
+			head = new DNode<T>(val);
+			return;
+		}
+		DNode <T>* p = head;
+		while (p->next != nullptr)
+		{
+			p = p->next;
+		}
+		p->next = new DNode<T>(val);
+		p->next->prev=p;
+	}
+	void insertAfter(T key, T val)
+	{
+		DNode<T>* p = head;
+		while (p != nullptr)
+		{
+			if (p->info == key)
+			{
+				DNode<T>* x = new DNode<T>(val);
+				x->prev = p;
+				x->next = p->next;
+			if(p->next)
+				p->next->prev = x;
+				p->next = x;
+				return;
+			}
+			p = p->next;
+		}
+	}
+	void insertBefore(T key, T val)
+	{
+		DNode<T>* p = head;
+		if (head && head->info == key)
+		{
+			insertAtHead(val);
+			return;
+		}
+		while (p != nullptr)
+		{
+			if (p->info == key)
+			{
+				DNode<T>* x = new DNode<T>(val);
+				x->prev = p->prev;
+				x->next = p;
+				p->prev = x;
+				x->prev->next = x;
+				return;
+			}
+			p = p->next;
+		}
+	}
+	void removeAtHead()
+	{
+		DNode <T>* p = head;
+		if (p != nullptr)
+		{
+			if (p->next)
+				p->next->prev = nullptr;
+			head = p->next;
+			return;
+		}
+	}
+	void remove(T key)
+	{
+		if (head->info == key)
+		{
+			removeAtHead();
+			return;
+		}
+		DNode <T>* p = head;
+		while (p != nullptr)
+		{
+			if (p->info == key)
+			{
+				if(p->prev)
+				p->prev->next = p->next;
+			    if(p->next)
+				  p->next->prev = p->prev;
+				return;
+			}
+			p = p->next;
+		}
+	}
+	
+	void removeAtTail()
+	{
+		DNode <T>* p = head;
+		if (head != nullptr && head->next == nullptr)
+		{
+			head = head->next;
+			return;
+		}
+		while (p != nullptr)
+		{
+			if (p->next == nullptr)
+			{
+				p->prev->next = nullptr;
+				return;
+			}
+			p = p->next;
+		}
+	}
+	void removeAfter(T key)
+	{
+		DNode<T>* p = head;
+		while (p != nullptr)
+	  {
+			if (p->info == key && p->next != nullptr)
+			{
+				DNode <T>* x = p->next;
+				p->next = x->next;
+				if(x->next)
+				  x->next->prev = p;
+				delete x;
+			    return;
+			}
+			p = p->next;
+		}
+	}
+	void removeBefore(T key)
+	{
+		DNode <T>* p = head;
+		while (p != nullptr)
+		{
+			if (p->info == key)
+			{
+				if (p->prev)
+				{
+					p->prev = p->prev->prev;
+					if (p->prev)
+						p->prev->next = p;
+					else
+						head = p;
+				}
+			}
+			p = p->next;
+		}
+	}
+	void display()
+	{
+		DNode <T>* p = head;
+		DNode<T>* tail = nullptr;
+		while (p != nullptr)
+		{
+			cout << p->info << ":";
+			tail = p;
+			p = p->next;	
+		}
+		cout << '\n';
+		while (tail!=nullptr)
+		{
+			cout << tail->info << ":";
+			tail = tail->prev;
+		}
+		cout << '\n';
+	}
+	~LDLL()
+	{
+		while (head != nullptr)
+		{
+			removeAtHead();
+		}
+	}
+};
+#endif // !LDLL_H

@@ -1,0 +1,192 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int category(char optr)
+{
+	if (optr == '^')
+		return 1;
+	else if (optr == '*' || optr == '/')
+		return 2;
+	else
+		return 3;
+}
+int precedence(char optr1,char optr2)
+{
+	if (category(optr1) == category(optr2))
+		return 0;
+	else if (optr2 == '^' || (optr2 == '*' || optr2 == '/')&&optr1!='^')
+		return 1;
+	else 
+		return -1;
+}
+bool isLeftToRight(char optr)
+{
+	return (optr == '^' ? false : true);
+}
+int evaluate(string postFix)
+{
+	int*stack = new int[postFix.length()],stackPointer=0,operator2,operator1;
+	for (int i=0; postFix[i] ; i++)
+	{
+		if (postFix[i] == '^' || postFix[i] == '/' || postFix[i] == '*' || postFix[i] == '+' || postFix[i] == '-')
+		{
+			operator2 = stack[stackPointer - 1];
+			operator1 = stack[stackPointer - 2];
+			stackPointer -= 2;
+			if (postFix[i] == '^')
+				stack[stackPointer++] = pow(operator1, operator2);
+			else if(postFix[i]=='/')
+				stack[stackPointer++] = operator1/operator2;
+			else if (postFix[i] == '*')
+				stack[stackPointer++] = operator1 * operator2;
+			else if (postFix[i] == '+')
+				stack[stackPointer++] = operator1 + operator2;
+			else
+			    stack[stackPointer++] = operator1 - operator2;
+		}
+		else
+			stack[stackPointer++] = postFix[i] - '0';
+	}
+	return stack[stackPointer - 1];
+}
+int main()
+{
+	string exp,postFix;
+	cin >> exp;
+	char*stack = new char[exp.length()];
+	int stackPointer = 0;
+	for (int i = 0; exp[i]; i++)
+	{
+		if(  ((stackPointer==0 || ( stackPointer>0 && (stack[stackPointer-1]=='(' || stack[stackPointer - 1] == '{' || stack[stackPointer - 1] == '[' )) ) && (exp[i]=='^'|| exp[i] == '*' || exp[i] == '/' || exp[i] == '+' || exp[i] == '-' )) || exp[i]=='('||exp[i]=='{'||exp[i]=='[') 
+			stack[stackPointer++] = exp[i];
+		else if (exp[i] == '^' || exp[i] == '/' || exp[i] == '*' || exp[i] == '+' || exp[i] == '-')
+		{
+			while (stackPointer > 0 && stack[stackPointer - 1] != '(' &&  stack[stackPointer - 1] != '{' && stack[stackPointer - 1] != '['  && precedence(stack[stackPointer - 1], exp[i]) <= 0)
+			{
+				if (precedence(stack[stackPointer - 1], exp[i]) < 0 || precedence(stack[stackPointer - 1], exp[i]) == 0 && isLeftToRight(exp[i]))
+				{
+					postFix += stack[stackPointer - 1];
+					stackPointer--;
+				}
+				else
+					postFix += exp[i];
+			}
+			stack[stackPointer++] = exp[i];
+		}
+		else if (exp[i] == ')' || exp[i] == '}' || exp[i] == ']')
+		{
+			while (stack[stackPointer - 1] != '(' && stack[stackPointer - 1] != '{' && stack[stackPointer - 1] != '[')
+			{
+				postFix += stack[stackPointer-1];
+				stackPointer--;
+			}
+			stackPointer--;
+		}
+		else//operands
+			postFix += exp[i];
+	}
+	stackPointer--;
+	while (stackPointer >= 0)
+	{
+		postFix += stack[stackPointer--];
+	}
+	cout << evaluate(postFix);
+	return 0;
+}
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+#include<iostream>
+#include<string>
+#include"StackADT.h"
+using namespace std;
+int category(char optr)
+{
+	if (optr == '^')
+		return 1;
+	else if (optr == '*' || optr == '/')
+		return 2;
+	else
+		return 3;
+}
+int precedence(char optr1,char optr2)
+{
+	if (category(optr1) == category(optr2))
+		return 0;                             // means equal precedence
+	else if (optr2 == '^' || (optr2 == '*' || optr2 == '/')&&optr1!='^')
+		return 1;                             // means greter precedence
+	else  
+		return -1;                            // means less precedence
+}
+bool isLeftToRight(char optr)
+{
+	return (optr == '^' ? false : true);
+}
+int evaluate(string postFix)
+{
+	Stack<int> stack;
+	int operand1, operand2;
+	for (int i=0; postFix[i] ; i++)
+	{
+		if (postFix[i] == '^' || postFix[i] == '/' || postFix[i] == '*' || postFix[i] == '+' || postFix[i] == '-')
+		{
+			operand2 = stack.pop();
+			operand1 = stack.pop();
+			if (postFix[i] == '^')
+				stack.push( pow(operand1, operand2) );
+			else if(postFix[i]=='/')
+				stack.push(operand1/operand2);
+			else if (postFix[i] == '*')
+				stack.push(operand1 * operand2);
+			else if (postFix[i] == '+')
+				stack.push( operand1 + operand2);
+			else
+			    stack.push( operand1 - operand2);
+		}
+		else
+			stack.push(postFix[i] - '0');
+	}
+	return stack.pop();
+}
+string toPostFix(string infix)
+{
+	string postFix;
+	Stack<char> stack;
+	for (int i = 0; infix[i]; i++)
+	{
+		if (((stack.getNumberOfElements() == 0 || (stack.getNumberOfElements() > 0 && (stack.stackTop() == '(' || stack.stackTop() == '{' || stack.stackTop() == '['))) && (infix[i] == '^' || infix[i] == '*' || infix[i] == '/' || infix[i] == '+' || infix[i] == '-')) || infix[i] == '(' )
+			stack.push(infix[i]);
+		else if (infix[i] == '^' || infix[i] == '/' || infix[i] == '*' || infix[i] == '+' || infix[i] == '-')
+		{
+			while (stack.getNumberOfElements() > 0 && stack.stackTop() != '('   && precedence(stack.stackTop(),infix[i]) <= 0)
+			{
+				if (precedence(stack.stackTop(), infix[i]) < 0 || precedence(stack.stackTop(),infix[i]) == 0 && isLeftToRight(infix[i]))
+					postFix += stack.pop();
+				else
+					postFix += infix[i];
+			}
+			stack.push(infix[i]);
+		}
+		else if (infix[i] == ')')
+		{
+			while (stack.stackTop() != '(')
+				postFix += stack.pop();
+			stack.pop();
+		}
+		else//operands
+			postFix += infix[i];
+	}
+	while (!stack.isEmpty())
+		postFix += stack.pop();
+	return postFix;
+}
+int main()
+{
+	string infix;
+	cin >> infix;
+	cout << evaluate(toPostFix(infix));
+	return 0;
+}

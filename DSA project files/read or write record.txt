@@ -1,0 +1,52 @@
+#include<iostream>
+#include<fstream>
+
+using namespace std;
+
+class student
+{
+private:
+	int rollno;
+	float total;
+public:
+	void indata()
+	{
+		cin >> rollno >> total;
+	}
+	void outdata()
+	{
+		cout << rollno << total;
+	}
+};
+
+int main()
+{/*
+//fstream ifs("xyz.bin", ios::binary | ios::in |ios::app);*/
+	fstream ifs("xyz.bin", ios::binary | ios::in | ios::out|ios::trunc);
+	if (!ifs.is_open())
+	{
+		cout << "error";
+	}
+	else 
+	{
+
+		student s;
+		s.indata();
+
+		ifs.write((char*)&s, sizeof(student));
+
+		ifs.seekg(0, ios::beg);
+
+		student a;
+
+		ifs.read((char*)&a, sizeof(student));
+
+
+
+		a.outdata();
+	}
+		return 0;
+
+}
+
+
