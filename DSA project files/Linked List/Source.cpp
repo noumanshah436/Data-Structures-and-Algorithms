@@ -49,14 +49,14 @@ int main()
 	q.insertAtHead(3);
 	q.insertAtHead(2);
 	q.insertAtHead(4);
-	
+
 	q.display();
 	cout << "\n";
 	LSLL<int> q2;
 	q2.insertAtHead(8);
 	q2.insertAtHead(6);
 	q2.insertAtHead(4);
-	
+
 	q2.display();
 	cout << "\n";
 

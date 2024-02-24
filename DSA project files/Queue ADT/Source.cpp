@@ -2,7 +2,7 @@
 using namespace std;
 
 template <typename T>
-class Queue
+struct Queue
 {
 	T * data;
 	int rear;   //  index where next val is palced
@@ -150,8 +150,31 @@ int main()
 
 	while (!(a.isEmpty()))
 	{
-		cout << a.deQueue()<<" ";
+		cout << a.deQueue() << " ";
 	}
+
+	cout << '\n' << a.capacity << endl;
+	cout << a.rear << endl;
+	cout << a.front <<endl;
+	cout << a.noOfElements << endl;
+
+	cout << "\\n again\n";
+
+	for (int i = 0; i <= 12; i++)
+	{
+		a.enQueue(i);
+
+	}
+
+	while (!(a.isEmpty()))
+	{
+		cout << a.deQueue() << " ";
+	}
+
+	cout << '\n' << a.capacity << endl;
+	cout << a.rear << endl;
+	cout << a.front << endl;
+	cout << a.noOfElements << endl;
 
 	return 0;
 }
